@@ -1,36 +1,36 @@
 import { View, Text } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { SafeAreaView, useWindowDimensions } from 'react-native';
+import { Reader, ReaderProvider } from 'epubjs-react-native';
+import { useParams } from "react-router-native";
+
 export default function ReadPage() {
+  const { width, height } = useWindowDimensions();
+  const {id} = useParams()
   const dispatch = useDispatch();
+  const [uri, setUri] = useState("http://192.168.43.216:4000/books/shekspir_romeo-i-dzhuletta_474836_fb2.epub")
   useEffect(() => {
     dispatch({ type: "CUT_HEADER" });
+    fetch("http://192.168.43.216:8000/books/"+id, {
+      method: 'GET'
+
+    }).then( resp => resp.json())
+    .then(response => setUri(response.path))
+    .catch (error => console.log(error))
     return () => {
       dispatch({ type: "RETURN_HEADER" });
     };
-  }, [dispatch]);
+  }, [dispatch, uri]);
   return (
-    <View style={{ paddingTop: 20 }}>
-      <Text style={{ fontSize: 30, paddingBottom: 10 }}>Глава 1</Text>
-      <Text style={{ fontSize: 20, paddingBottom: 30 }}>
-        Ограбление банка. Захват заложников. Выстреп, На лестничной клетке -
-        топпа полицейских, которые собираются брать штурмом квартиру. На месте
-        запожников мог оказаться кто угодно, это гораздо проще, чем можно поду
-        мать. Все, что для этого нужно, - одна по-настоящему плохая идея
-      </Text>
-      <Text style={{ fontSize: 20, paddingBottom: 30 }}>
-        Это история обо всем на свете, но главным образом-об идиота. Идио том,
-        скажем прямо, можно назвать любого, вот только не стоит забывать быть
-        человеком - депо вообще трудное до безумия. Особенно если рядом с тобой
-        пюди, перед которыми ты пытаешься выглядеть хорошим
-      </Text>
-      <Text style={{ fontSize: 20, paddingBottom: 30 }}>
-        В наше время человеку то и дело приходится отвечать самым разным
-        сониданиям. Нужно иметь работу, крышу над головой, платить напоги,
-        следить за тем, чтобы на тебе всегда из рук, несется вперед, влюбляется
-        и разбива ется на куски. С этим ничего не поделаешь. Мы учимся
-        притворяться, посто
-      </Text>
-    </View>
+    <SafeAreaView>
+      <ReaderProvider>
+        <Reader
+          src={{ uri: uri }}
+          width={width}
+          height={height-90}
+        />
+      </ReaderProvider>
+    </SafeAreaView>
   );
 }

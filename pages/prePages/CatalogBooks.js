@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CatalogTitle from "./../../components/Elements/Headers/CatalogTitle";
 import { strings } from "./../../localization";
 import { useSelector } from "react-redux";
@@ -14,6 +14,7 @@ import Photo6 from "./../../Images/test/books/6.png";
 import Photo7 from "./../../Images/test/books/7.png";
 import Photo8 from "./../../Images/test/books/8.png";
 import Photo9 from "./../../Images/test/books/9.png";
+import image from "./../../Images/Icons/default_book_cover.png"
 
 const books = [
   {
@@ -73,7 +74,25 @@ const books = [
 ];
 export default function CatalogBooks() {
   const store = useSelector((state) => state);
+  const [books, setBooks] = useState([])
   useEffect(() => {
+    strings.setLanguage(store.lang);
+    fetch(`http://192.168.43.216:8000/books`, {
+      method: 'GET'
+
+    }).then( resp => resp.json())
+    .then(response => {
+      let filtered_books = []
+      for (let i = 0; i<response.length; i++ ){
+        if (response[i].path.slice(-4 ) === "epub"){
+          console.log(response[i].path.slice(-4 ))
+            filtered_books.push(response[i])
+        }
+      }
+        
+        setBooks(filtered_books)
+    })
+    .catch (error => console.log(error))
     strings.setLanguage(store.lang);
   }, []);
   return (
@@ -106,9 +125,9 @@ export default function CatalogBooks() {
               <Book
                 path={`/books/${book.id}`}
                 key={book.id}
-                author={book.author}
-                title={book.title}
-                image={book.image}
+                author={""}
+                title={book.name}
+                image={image}
               />
             )
           )}

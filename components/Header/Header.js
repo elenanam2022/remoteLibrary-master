@@ -17,8 +17,6 @@ import { Link } from "react-router-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Overlay } from "@rneui/base";
 import HeaderMenu from "./ModalPages/HeaderMenu";
-import HeaderLogin from "./ModalPages/HeaderLogin";
-import CustomSearchBar from "./CustomSearchBar/CustomSearchBar";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function Header() {
@@ -36,6 +34,10 @@ export default function Header() {
       strings.setLanguage("en");
       setLng("EN");
     } else if (strings.getLanguage() === "en") {
+      AsyncStorage.setItem("lng", "tj");
+      strings.setLanguage("tj");
+      setLng("TJ");
+    }else if (strings.getLanguage() === "tj") {
       AsyncStorage.setItem("lng", "ru");
       strings.setLanguage("ru");
       setLng("РУС");
@@ -53,6 +55,8 @@ export default function Header() {
       setLng("КЫРГ");
     } else if (strings.getLanguage() === "en") {
       setLng("EN");
+    }else if (strings.getLanguage() === "tj") {
+      setLng("TJ");
     }
   }, []);
   return (
@@ -76,12 +80,7 @@ export default function Header() {
               closeMenu={() => setModalState("closed")}
             />
           )}
-          {modalState === "login" && (
-            <HeaderLogin
-              strings={strings}
-              closeMenu={() => setModalState("closed")}
-            />
-          )}
+          
         </Overlay>
       )}
       <View style={styles.wrapper}>
@@ -114,28 +113,8 @@ export default function Header() {
               </TouchableOpacity>
             </View>
           )}
-          {!store.cuttedHeader && (
-            <View style={styles.item}>
-              <Image
-                style={styles.notification_img}
-                source={Notification}
-                alt="notification"
-              ></Image>
-            </View>
-          )}
-          {!store.cuttedHeader && (
-            <View style={styles.item}>
-              <TouchableHighlight
-                onPress={() => setModalState("login")}
-                underlayColor="white"
-              >
-                <Image style={styles.login_img} source={Login} alt="login" />
-              </TouchableHighlight>
-            </View>
-          )}
-          <View style={styles.item}>
-            <Image style={styles.theme_img} source={Theme} alt="theme" />
-          </View>
+         
+          
           <View style={styles.item}>
             <TouchableHighlight
               onPress={() => setModalState("menu")}
@@ -146,7 +125,6 @@ export default function Header() {
           </View>
         </View>
       </View>
-      {!store.cuttedHeader && <CustomSearchBar strings={strings} />}
     </View>
   );
 }
@@ -192,9 +170,9 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   menu_img: {
-    width: 40,
-    height: 40,
-    margin: 3,
+    width: 45,
+    height: 30,
+    margin: 5,
   },
   theme_img: {
     width: 30,

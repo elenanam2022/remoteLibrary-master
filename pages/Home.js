@@ -17,9 +17,6 @@ export default function Home() {
       <Books />
       <Hr style={{ marginVertical: 2, marginTop: 8 }} />
       <Hr />
-      <AudioBooks />
-      <Hr style={{ marginVertical: 2, marginTop: 8 }} />
-      <Hr />
       <Videos />
     </View>
   );

@@ -27,9 +27,6 @@ export default function GeneralInformation({ data, readTo, audio }) {
               {strings.sourceText}: {data.source}
             </Text>
             <Text style={styles.citationText}>
-              {strings.translateDate}: {data.translateDate}
-            </Text>
-            <Text style={styles.citationText}>
               {strings.publishYearText}: {data.publishDate}
             </Text>
           </View>
@@ -40,12 +37,6 @@ export default function GeneralInformation({ data, readTo, audio }) {
             <Link style={styles.button}>
               <Text style={styles.ButtonText}>{strings.downloadText}</Text>
             </Link>
-            <Button
-              titleStyle={styles.ButtonText}
-              containerStyle={styles.buttonContainer}
-              buttonStyle={styles.button}
-              title={strings.saveText}
-            />
           </View>
           {audio && (
             <View style={[styles.buttonWrapper, { paddingTop: 0 }]}>

@@ -23,15 +23,6 @@ export default function HeaderMenu({ strings, closeMenu }) {
       >
         <Text style={styles.menuItemLink}>{strings.videoText}</Text>
       </Link>
-      <Hr />
-      <Link
-        to="/gov-directory"
-        onPress={closeMenu}
-        replace={true}
-        style={styles.menuItem}
-      >
-        <Text style={styles.menuItemLink}>{strings.newsText}</Text>
-      </Link>
     </View>
   );
 }

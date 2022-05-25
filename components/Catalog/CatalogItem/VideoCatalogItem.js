@@ -27,13 +27,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     width: 100,
   },
-  image: {
-    height: 130,
-    width: 100,
-    // width: 50,
-    // heithg: 100,
-    resizeMode: "stretch"
-  },
+  image: {},
   title: {
     flexWrap: "wrap",
     width: 100,

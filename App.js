@@ -16,6 +16,9 @@ import CatalogVideos from "./pages/prePages/CatalogVideos";
 import BookDetails from "./components/Details/BookDetails";
 import AudioBookDetails from "./components/Details/AudioBookDetails";
 import ReadPage from "./pages/prePages/ReadPage";
+import { registerRootComponent } from 'expo';
+
+
 
 export default function App() {
   return (
@@ -32,6 +35,15 @@ export default function App() {
                 <Route
                   exact
                   path="/videos/:id"
+                  element={
+                    <Catalog>
+                      <VideosDetails />
+                    </Catalog>
+                  }
+                />
+                <Route
+                  exact
+                  path="videos/videos/:id"
                   element={
                     <Catalog>
                       <VideosDetails />
@@ -143,4 +155,4 @@ const styles = StyleSheet.create({
   routers: { width: "100%" },
   scrollView: {},
 });
-AppRegistry.registerComponent("MyApp", () => App);
+registerRootComponent(App);

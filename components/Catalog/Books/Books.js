@@ -1,54 +1,53 @@
-import { View, Text, StyleSheet } from "react-native";
-import React, { useEffect } from "react";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
+import React, { useEffect, useState} from "react";
 import CatalogTitle from "../../Elements/Headers/CatalogTitle";
 import { strings } from "../../../localization";
 import { useSelector } from "react-redux";
 import Hr from "../../Elements/Basic/Hr";
 import Book from "../CatalogItem/CatalogItem";
-import Photo1 from "./../../../Images/test/books/1.png";
-import Photo2 from "./../../../Images/test/books/2.png";
-import Photo3 from "./../../../Images/test/books/3.png";
-const books = [
-  {
-    id: 1,
-    title: "Тревожные люди",
-    author: "Фредрик Бакман",
-    image: Photo1,
-  },
-  {
-    id: 2,
-    title: "Лекарство от меланхолии. Сборник",
-    author: "Рэй Брэдбери",
-    image: Photo2,
-  },
-  {
-    id: 3,
-    title: "На краю",
-    author: "Николай Свечин",
-    image: Photo3,
-  },
-];
+import image from "./../../../Images/Icons/default_book_cover.png";
+
 export default function Books() {
   const store = useSelector((state) => state);
+  const [books, setBooks] = useState([]);
   useEffect(() => {
+    fetch(`http://192.168.43.216:8000/books-popular`, {
+      method: 'GET'
+
+    }).then( resp => resp.json())
+    .then(response => {
+      let filtered_books = []
+      for (let i = 0; i<response.length; i++ ){
+        if (response[i].path.slice(-4 ) === "epub"){
+          console.log(response[i].path.slice(-4 ))
+            filtered_books.push(response[i])
+        }
+      }
+        
+        setBooks(filtered_books)
+    })
+    .catch (error => console.log(error))
     strings.setLanguage(store.lang);
+  
   }, []);
   return (
     <View style={styles.container}>
       <CatalogTitle path="/books" text={strings.Book_Bestsellers} />
       <Hr style={{ marginVertical: 2, marginTop: 8 }} />
       <Hr />
-      <View style={styles.bookList}>
+      <ScrollView
+      horizontal
+      style={styles.bookList}>
         {books.map((book) => (
           <Book
             path={`/books/${book.id}`}
             key={book.id}
             author={book.author}
-            title={book.title}
-            image={book.image}
+            title={book.name}
+            image={image}
           />
         ))}
-      </View>
+      </ScrollView>
     </View>
   );
 }
@@ -58,8 +57,6 @@ const styles = StyleSheet.create({
   },
   bookList: {
     paddingTop: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "stretch",
+    flexDirection: "row"
   },
 });
